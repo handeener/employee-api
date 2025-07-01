@@ -27,4 +27,6 @@ public class Employee {
     private String department;
 
     private String position;
+
+    private String phoneNumber;
 }
