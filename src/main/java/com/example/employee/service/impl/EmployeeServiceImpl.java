@@ -1,38 +1,44 @@
 package com.example.employee.service.impl;
 
 import com.example.employee.dto.EmployeeDTO;
+import com.example.employee.mapper.EmployeeMapper;
+import com.example.employee.repository.EmployeeRepository;
 import com.example.employee.service.EmployeeService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
+    EmployeeRepository repository;
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
-        // Logic to create an employee
-        return null; // Replace with actual implementation
+        return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
     }
 
     @Override
     public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
-        // Logic to update an employee
-        return null; // Replace with actual implementation
+        if (repository.existsById(id)) {
+            employeeDTO.setId(id);
+            return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
+        }
+        return null;
     }
 
     @Override
     public void deleteEmployee(Long id) {
-        // Logic to delete an employee
+        repository.deleteById(id);
     }
 
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
-        // Logic to get an employee by ID
-        return null; // Replace with actual implementation
+        return EmployeeMapper.INSTANCE.toDto(
+                repository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found")));
     }
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {
-        // Logic to get all employees
-        return null; // Replace with actual implementation
+        return repository.findAll().stream().map(EmployeeMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
     }
 }
