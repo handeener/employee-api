@@ -1,6 +1,7 @@
 package com.example.employee.service;
 
 import com.example.employee.dto.EmployeeDTO;
+import com.example.employee.exception.MicroException;
 
 import java.util.List;
 
@@ -10,6 +11,5 @@ public interface EmployeeService {
     void deleteEmployee(Long id);
     EmployeeDTO getEmployeeById(Long id);
     List<EmployeeDTO> getAllEmployees();
-    
 
 }

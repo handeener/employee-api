@@ -1,9 +1,9 @@
-package com.example.employee.controller;
+package com.example.employee.web.controller;
 
 import com.example.employee.dto.EmployeeDTO;
 import com.example.employee.service.EmployeeService;
+import com.example.employee.web.response.CustomResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,16 +15,16 @@ import java.util.List;
 public class  EmployeeController {
     private final EmployeeService employeeService;
 
-    @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    @PostMapping("/create")
+    public ResponseEntity<CustomResponse<EmployeeDTO>> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
         EmployeeDTO createdEmployee = employeeService.createEmployee(employeeDTO);
-        return ResponseEntity.ok(createdEmployee);
+        return ResponseEntity.ok(CustomResponse.success(createdEmployee));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<CustomResponse<EmployeeDTO>> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
         EmployeeDTO updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
-        return ResponseEntity.ok(updatedEmployee);
+        return ResponseEntity.ok(CustomResponse.success(updatedEmployee));
     }
 
     @DeleteMapping("/{id}")
@@ -34,12 +34,12 @@ public class  EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<CustomResponse<EmployeeDTO>> getEmployeeById(@PathVariable Long id) {
         EmployeeDTO employee = employeeService.getEmployeeById(id);
-        return ResponseEntity.ok(employee);
+        return ResponseEntity.ok(CustomResponse.success(employee));
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
         List<EmployeeDTO> employees = employeeService.getAllEmployees();
         return ResponseEntity.ok(employees);

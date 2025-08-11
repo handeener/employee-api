@@ -1,9 +1,10 @@
-package com.example.employee.service.impl;
+package com.example.employee.service;
 
 import com.example.employee.dto.EmployeeDTO;
+import com.example.employee.exception.EmployeeException;
+import com.example.employee.exception.MicroException;
 import com.example.employee.mapper.EmployeeMapper;
 import com.example.employee.repository.EmployeeRepository;
-import com.example.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository repository;
     @Override
-    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO){
+    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) throws MicroException {
         return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
     }
 
@@ -37,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
         return EmployeeMapper.INSTANCE.toDto(
-                repository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found")));
+                repository.findById(id).orElseThrow(() -> new MicroException(EmployeeException.USER_NOT_FOUND)));
     }
 
     @Override
