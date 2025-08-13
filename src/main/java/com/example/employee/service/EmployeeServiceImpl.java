@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeRepository repository;
+    private final EmployeeRepository repository;
+
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) throws MicroException {
         return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
@@ -23,15 +24,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
-        if (repository.existsById(id)) {
-            employeeDTO.setId(id);
-            return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
+        if (!repository.existsById(id)) {
+            throw new MicroException(EmployeeException.USER_NOT_FOUND);
         }
-        return null;
+        employeeDTO.setId(id);
+        return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
     }
 
     @Override
     public void deleteEmployee(Long id) {
+        if (!repository.existsById(id)) {
+            throw new MicroException(EmployeeException.USER_NOT_FOUND);
+        }
         repository.deleteById(id);
     }
 
