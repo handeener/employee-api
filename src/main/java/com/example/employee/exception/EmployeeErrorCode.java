@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum EmployeeErrorCode {
 
-    GENERAL_ERROR(1001, "An unexpected error occurred in the service"),
+    GENERAL_ERROR(1001, "An unexpected error occurred"),
     UNKNOWN_ERROR(1000, "Unknown exception occured"),
     USER_NOT_FOUND(3001, "User not found"),
     INVALID_INPUT(2002, "Invalid input");
