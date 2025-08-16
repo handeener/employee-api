@@ -1,31 +1,37 @@
 package com.example.employee.service;
 
 import com.example.employee.dto.EmployeeDTO;
-import com.example.employee.exception.EmployeeException;
+import com.example.employee.exception.EmployeeErrorCode;
 import com.example.employee.exception.MicroException;
 import com.example.employee.mapper.EmployeeMapper;
 import com.example.employee.repository.EmployeeRepository;
+import com.example.employee.web.request.EmployeeRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
+@Service
+@Getter
+@Setter
 public class EmployeeServiceImpl implements EmployeeService {
-
-    private final EmployeeRepository repository;
+    @Autowired
+    private EmployeeRepository repository;
 
     @Override
-    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) throws MicroException {
-        return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
+    public EmployeeDTO createEmployee(EmployeeRequest request) throws MicroException {
+        return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(request.getEmployeeDTO())));
     }
 
     @Override
     public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
         if (!repository.existsById(id)) {
-            throw new MicroException(EmployeeException.USER_NOT_FOUND);
+            throw new MicroException(EmployeeErrorCode.USER_NOT_FOUND);
         }
         employeeDTO.setId(id);
         return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
@@ -34,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteEmployee(Long id) {
         if (!repository.existsById(id)) {
-            throw new MicroException(EmployeeException.USER_NOT_FOUND);
+            throw new MicroException(EmployeeErrorCode.USER_NOT_FOUND);
         }
         repository.deleteById(id);
     }
@@ -42,7 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO getEmployeeById(Long id) {
         return EmployeeMapper.INSTANCE.toDto(
-                repository.findById(id).orElseThrow(() -> new MicroException(EmployeeException.USER_NOT_FOUND)));
+                repository.findById(id).orElseThrow(() -> new MicroException(EmployeeErrorCode.USER_NOT_FOUND)));
     }
 
     @Override

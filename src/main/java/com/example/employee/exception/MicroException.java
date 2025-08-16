@@ -1,14 +1,16 @@
 package com.example.employee.exception;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class MicroException extends RuntimeException {
 
     private final int errorCode;
     private final String message;
 
-    public MicroException(EmployeeException errorCode) {
+    public MicroException(EmployeeErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode.getErrorCode();
         this.message = errorCode.getMessage();

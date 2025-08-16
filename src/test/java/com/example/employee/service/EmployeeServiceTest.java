@@ -4,6 +4,7 @@ import com.example.employee.dto.EmployeeDTO;
 import com.example.employee.exception.MicroException;
 import com.example.employee.mapper.EmployeeMapper;
 import com.example.employee.repository.EmployeeRepository;
+import com.example.employee.web.request.EmployeeRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,13 +28,14 @@ public class EmployeeServiceTest {
 
     @Test
     void givenValidInput_whenCreateEmployee_thenReturnEmployee() {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
+        EmployeeRequest request = new EmployeeRequest();
+        request.setEmployeeDTO(new EmployeeDTO());
 
-        when(repository.save(any())).thenReturn(EmployeeMapper.INSTANCE.toEntity(employeeDTO));
-        EmployeeDTO createdEmployee = service.createEmployee(employeeDTO);
+        when(repository.save(any())).thenReturn(EmployeeMapper.INSTANCE.toEntity(request.getEmployeeDTO()));
+        EmployeeDTO createdEmployee = service.createEmployee(request);
 
         assertNotNull(createdEmployee);
-        assertEquals(employeeDTO.getFirstName(), createdEmployee.getFirstName());
+        assertEquals(request.getEmployeeDTO().getFirstName(), createdEmployee.getFirstName());
     }
 
     @Test
@@ -96,8 +98,6 @@ public class EmployeeServiceTest {
     @Test
     void givenId_whenGetEmployeeById_thenReturnException() {
         Long id = 1L;
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setId(id);
 
         when(repository.findById(id)).thenReturn(Optional.empty());
         MicroException exception = assertThrows(MicroException.class, () -> service.getEmployeeById(id));
