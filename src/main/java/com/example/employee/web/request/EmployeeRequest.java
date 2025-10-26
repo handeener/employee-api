@@ -7,5 +7,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmployeeRequest {
-    EmployeeDTO employeeDTO;
+    private EmployeeDTO employeeDTO;
 }

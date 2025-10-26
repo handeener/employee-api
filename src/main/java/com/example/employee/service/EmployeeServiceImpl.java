@@ -6,22 +6,17 @@ import com.example.employee.exception.MicroException;
 import com.example.employee.mapper.EmployeeMapper;
 import com.example.employee.repository.EmployeeRepository;
 import com.example.employee.web.request.EmployeeRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
-@Getter
-@Setter
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    @Autowired
-    private EmployeeRepository repository;
+
+    EmployeeRepository repository;
 
     @Override
     public EmployeeDTO createEmployee(EmployeeRequest request) throws MicroException {
@@ -34,7 +29,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new MicroException(EmployeeErrorCode.USER_NOT_FOUND);
         }
         employeeDTO.setId(id);
-        return EmployeeMapper.INSTANCE.toDto(repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
+        repository.save(EmployeeMapper.INSTANCE.toEntity(employeeDTO));
+        return employeeDTO;
     }
 
     @Override

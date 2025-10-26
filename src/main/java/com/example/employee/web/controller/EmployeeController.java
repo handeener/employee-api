@@ -5,7 +5,6 @@ import com.example.employee.service.EmployeeService;
 import com.example.employee.web.request.EmployeeRequest;
 import com.example.employee.web.response.CustomResponse;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class  EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<@NotNull CustomResponse<EmployeeDTO>> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<CustomResponse<EmployeeDTO>> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
         EmployeeDTO updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
         return ResponseEntity.ok(CustomResponse.success(updatedEmployee));
     }
