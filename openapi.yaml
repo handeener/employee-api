@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Employee API
+  version: 1.0.0
+  description: Çalışan yönetimi için CRUD servisleri
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/employees/create:
+    post:
+      summary: Yeni çalışan oluştur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeCreate"
+      responses:
+        "201":
+          description: Çalışan oluşturuldu
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+  /api/employees/{id}:
+    get:
+      summary: Çalışan detayını getir
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Çalışan bulundu
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "404":
+          description: Çalışan bulunamadı
+    put:
+      summary: Çalışanı güncelle
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeUpdate"
+      responses:
+        "200":
+          description: Çalışan güncellendi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "404":
+          description: Çalışan bulunamadı
+    delete:
+      summary: Çalışanı sil
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Çalışan silindi
+        "404":
+          description: Çalışan bulunamadı
+  /api/employees/getAll:
+    get:
+      summary: Tüm çalışanları getir
+      responses:
+        "200":
+          description: Çalışan listesi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Employee"
+
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: Ahmet
+        lastName:
+          type: string
+          example: Yılmaz
+        email:
+          type: string
+          example: ahmet.yilmaz@example.com
+    EmployeeCreate:
+      type: object
+      required: [firstName, lastName, email]
+      properties:
+        firstName: { type: string }
+        lastName:  { type: string }
+        email:     { type: string }
+    EmployeeUpdate:
+      type: object
+      properties:
+        firstName: { type: string }
+        lastName:  { type: string }
+        email:     { type: string }
