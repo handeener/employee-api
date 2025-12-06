@@ -2,7 +2,6 @@ package com.example.employee.mapper;
 import com.example.employee.dto.EmployeeDTO;
 import com.example.employee.entity.Employee;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 

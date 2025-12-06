@@ -129,7 +129,7 @@ public class EmployeeServiceTest {
         assertNotNull(employees);
         assertFalse(employees.isEmpty());
         assertEquals(1, employees.size());
-        assertEquals(employeeDTO.getFirstName(), employees.get(0).getFirstName());
+        assertEquals(employeeDTO.getFirstName(), employees.getFirst().getFirstName());
     }
 
 }

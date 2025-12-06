@@ -3,8 +3,6 @@ package com.example.employee.web.response;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 public class CustomResponse<T> {
