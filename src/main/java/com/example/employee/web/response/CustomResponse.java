@@ -3,23 +3,25 @@ package com.example.employee.web.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 public class CustomResponse<T> {
 
     private T data;
     private String message;
-    private int statusCode;
+    private int status;
     private boolean success;
 
-    public CustomResponse(boolean success, T data, String message, int statusCode) {
+    public CustomResponse(boolean success, T data, String message, int status) {
         this.success = success;
         this.data = data;
         this.message = message;
-        this.statusCode = statusCode;
+        this.status = status;
     }
-    public CustomResponse(boolean success, String message, int statusCode) {
-        this(success,null, message, statusCode);
+    public CustomResponse(boolean success, String message, int status) {
+        this(success,null, message, status);
     }
     public CustomResponse() {
         this(true, null, "success", 200);
@@ -28,8 +30,8 @@ public class CustomResponse<T> {
         return new CustomResponse<>(true, data, "success", 200);
     }
 
-    public static <T> CustomResponse<T> error(String message, int statusCode) {
-        return new CustomResponse<>(false,null, message, statusCode);
+    public static <T> CustomResponse<T> error(String message, int status) {
+        return new CustomResponse<>(false,null, message, status);
     }
 
 }

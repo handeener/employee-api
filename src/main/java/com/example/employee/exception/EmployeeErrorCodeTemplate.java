@@ -3,7 +3,7 @@ package com.example.employee.exception;
 import lombok.Getter;
 
 @Getter
-public enum EmployeeErrorCode {
+public enum EmployeeErrorCodeTemplate {
 
     GENERAL_ERROR(1001, "An unexpected error occurred"),
     UNKNOWN_ERROR(1000, "Unknown exception occured"),
@@ -13,7 +13,7 @@ public enum EmployeeErrorCode {
     private final int errorCode;
     private final String message;
 
-    EmployeeErrorCode(int errorCode, String message) {
+    EmployeeErrorCodeTemplate(int errorCode, String message) {
         this.errorCode = errorCode;
         this.message = message;
     }

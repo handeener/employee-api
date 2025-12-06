@@ -1,6 +1,7 @@
 package com.example.employee.service;
 
 import com.example.employee.dto.EmployeeDTO;
+import com.example.employee.entity.Employee;
 import com.example.employee.exception.MicroException;
 import com.example.employee.mapper.EmployeeMapper;
 import com.example.employee.repository.EmployeeRepository;
@@ -25,17 +26,20 @@ public class EmployeeServiceTest {
     EmployeeServiceImpl service;
     @Mock
     EmployeeRepository repository;
+    @Mock
+    EmployeeMapper mapper;
 
     @Test
     void givenValidInput_whenCreateEmployee_thenReturnEmployee() {
+        EmployeeDTO dto = new EmployeeDTO();
         EmployeeRequest request = new EmployeeRequest();
-        request.setEmployeeDTO(new EmployeeDTO());
+        request.setEmployeeDTO(dto);
+        Employee entity = new Employee();
 
-        when(repository.save(any())).thenReturn(EmployeeMapper.INSTANCE.toEntity(request.getEmployeeDTO()));
-        EmployeeDTO createdEmployee = service.createEmployee(request);
+        when(mapper.toEntity(dto)).thenReturn(entity);
+        when(repository.save(entity)).thenReturn(entity);
 
-        assertNotNull(createdEmployee);
-        assertEquals(request.getEmployeeDTO().getFirstName(), createdEmployee.getFirstName());
+        assertDoesNotThrow(() -> service.createEmployee(request));
     }
 
     @Test
@@ -43,9 +47,13 @@ public class EmployeeServiceTest {
         Long id = 1L;
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(id);
+        Employee entity = new Employee();
+        entity.setId(id);
 
-        when(repository.existsById(id)).thenReturn(Boolean.TRUE);
-        when(repository.save(any())).thenReturn(EmployeeMapper.INSTANCE.toEntity(employeeDTO));
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+        when(repository.save(any(Employee.class))).thenReturn(entity);
+        when(mapper.toDto(entity)).thenReturn(employeeDTO);
+
         EmployeeDTO updatedEmployee = service.updateEmployee(id, employeeDTO);
 
         assertEquals(updatedEmployee.getId(), employeeDTO.getId());
@@ -57,7 +65,7 @@ public class EmployeeServiceTest {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(id);
 
-        when(repository.existsById(id)).thenReturn(Boolean.FALSE);
+        when(repository.findById(id)).thenReturn(Optional.empty());
         MicroException exception = assertThrows(MicroException.class, () -> service.updateEmployee(id, employeeDTO));
 
         assertEquals("User not found", exception.getMessage());
@@ -87,8 +95,12 @@ public class EmployeeServiceTest {
         Long id = 1L;
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(id);
+        Employee entity = new Employee();
+        entity.setId(id);
 
-        when(repository.findById(id)).thenReturn(java.util.Optional.of(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
+        when(repository.findById(id)).thenReturn(java.util.Optional.of(entity));
+        when(mapper.toDto(entity)).thenReturn(employeeDTO);
+
         EmployeeDTO foundEmployee = service.getEmployeeById(id);
 
         assertNotNull(foundEmployee);
@@ -107,16 +119,17 @@ public class EmployeeServiceTest {
     @Test
     void whenGetAllEmployees_thenReturnListOfEmployees() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
+        Employee entity = new Employee();
 
-        when(repository.findAll())
-                .thenReturn(java.util.Collections.singletonList(EmployeeMapper.INSTANCE.toEntity(employeeDTO)));
+        when(repository.findAll()).thenReturn(java.util.Collections.singletonList(entity));
+        when(mapper.toDto(entity)).thenReturn(employeeDTO);
+
         List<EmployeeDTO> employees = service.getAllEmployees();
 
         assertNotNull(employees);
         assertFalse(employees.isEmpty());
         assertEquals(1, employees.size());
-        assertEquals(employeeDTO.getFirstName(), employees.getFirst().getFirstName());
+        assertEquals(employeeDTO.getFirstName(), employees.get(0).getFirstName());
     }
-
 
 }

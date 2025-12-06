@@ -21,10 +21,12 @@ public class  EmployeeController {
     @PostMapping("/create")
     public ResponseEntity<CustomResponse<EmployeeDTO>> createEmployee(@RequestBody EmployeeRequest request) {
         if (request == null || request.getEmployeeDTO() == null) {
-            return ResponseEntity.badRequest().body(CustomResponse.error("Employee data is required", 400));
+                return ResponseEntity.badRequest().body(CustomResponse.error("Employee data is required", 400));
         }
-        EmployeeDTO createdEmployee = employeeService.createEmployee(request);
-        return ResponseEntity.ok(CustomResponse.success(createdEmployee));
+        System.out.println(">>> REQUEST DTO = " + request);
+
+        employeeService.createEmployee(request);
+        return ResponseEntity.ok(CustomResponse.success(null));
     }
 
     @PutMapping("/{id}")
@@ -46,9 +48,9 @@ public class  EmployeeController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
-        List<EmployeeDTO> employees = employeeService.getAllEmployees();
-        return ResponseEntity.ok(employees);
+    public ResponseEntity<CustomResponse<List<EmployeeDTO>>> getAllEmployees() {
+        List<EmployeeDTO> employeeList = employeeService.getAllEmployees();
+        return ResponseEntity.ok(CustomResponse.success(employeeList));
     }
 
 }

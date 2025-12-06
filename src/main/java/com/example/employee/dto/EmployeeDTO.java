@@ -4,6 +4,8 @@ import lombok.*;
 
 @Getter
 @Setter
+@ToString
+@Data
 public class EmployeeDTO {
     private Long id;
     private String firstName;

@@ -7,31 +7,16 @@ import lombok.Setter;
 @Getter
 public class MicroException extends RuntimeException {
 
-    private final int errorCode;
-    private final String message;
+    private final EmployeeErrorCodeTemplate errorTemplate;
 
-    public MicroException(EmployeeErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode.getErrorCode();
-        this.message = errorCode.getMessage();
+    public MicroException(EmployeeErrorCodeTemplate errorTemplate) {
+        super(errorTemplate.getMessage());
+        this.errorTemplate = errorTemplate;
     }
 
-    public MicroException(String message, int errorCode) {
-        super(message);
-        this.errorCode = errorCode;
-        this.message = message;
-    }
-
-    public MicroException(String message, Throwable cause, int errorCode) {
-        super(message, cause);
-        this.errorCode = errorCode;
-        this.message = message;
-    }
-
-    public MicroException(Throwable cause, int errorCode, String message) {
-        super(cause);
-        this.errorCode = errorCode;
-        this.message = message;
+    public MicroException(EmployeeErrorCodeTemplate errorTemplate, String customMessage) {
+        super(customMessage);
+        this.errorTemplate = errorTemplate;
     }
 
 }
