@@ -89,6 +89,7 @@ src
 - `GET /api/employees/{id}` - Retrieve an employee by ID
 - `PUT /api/employees/{id}` - Update an existing employee by ID
 - `DELETE /api/employees/{id}` - Delete an employee by ID
+- PS: CORS configuration is simplified for development purposes by adding CrossOrigin annotation to controller 
 
 ## 🔧 Configuration
 - Application configuration is located in `src/main/resources/application.yml`.
